@@ -90,7 +90,9 @@ class BetterPlayerDashUtils {
   }
 
   static BetterPlayerAsmsSubtitle parseSubtitle(
-      String masterPlaylistUrl, XmlElement node) {
+    String masterPlaylistUrl,
+    XmlElement node,
+  ) {
     final String segmentAlignmentStr =
         node.getAttribute('segmentAlignment') ?? '';
     String? name = node.getAttribute('label');
@@ -120,14 +122,19 @@ class BetterPlayerDashUtils {
       url = 'https:$url';
     }
 
+    if (url != null && url.endsWith('.mp4')) {
+      url = url.replaceAll('.mp4', '.vtt');
+    }
+
     name ??= language;
 
     return BetterPlayerAsmsSubtitle(
-        name: name,
-        language: language,
-        mimeType: mimeType,
-        segmentAlignment: segmentAlignmentStr.toLowerCase() == 'true',
-        url: url,
-        realUrls: [url ?? '']);
+      name: name,
+      language: language,
+      mimeType: mimeType,
+      segmentAlignment: segmentAlignmentStr.toLowerCase() == 'true',
+      url: url,
+      realUrls: [url ?? ''],
+    );
   }
 }

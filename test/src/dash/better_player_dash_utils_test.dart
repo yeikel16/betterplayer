@@ -17,15 +17,16 @@ void main() {
     expect(betterPlayerAsmsDataHolder.tracks?.length, equals(5));
   });
 
-  testWidgets('better player dash utils ...', (tester) async {
+  testWidgets('check subtitle values', (tester) async {
     expect(
       betterPlayerAsmsDataHolder.subtitles?.first,
       isA<BetterPlayerAsmsSubtitle>()
           .having((sub) => sub.name, 'name', equals('en'))
+          .having((sub) => sub.language, 'language', equals('en'))
           .having(
             (sub) => sub.url,
             'url',
-            'https://myurl.com/videos/53e4ce8377664d859becd1db87e5b97e/text/text-eng-2.mp4',
+            'https://myurl.com/videos/53e4ce8377664d859becd1db87e5b97e/text/text-eng-2.vtt',
           ),
     );
   });
