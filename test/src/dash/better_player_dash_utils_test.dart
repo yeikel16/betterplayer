@@ -1,16 +1,33 @@
+import 'package:better_player/better_player.dart';
 import 'package:better_player/src/dash/better_player_dash_utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('better player dash utils ...', (tester) async {
-    final result = await BetterPlayerDashUtils.parse(
-      mainfest,
-      'https://myurl.com/manifest.mpd',
-    );
+  late final BetterPlayerAsmsDataHolder betterPlayerAsmsDataHolder;
 
-    expect(result.audios?.length, equals(2));
-    expect(result.subtitles?.length, equals(2));
-    expect(result.tracks?.length, equals(5));
+  setUpAll(() async {
+    betterPlayerAsmsDataHolder = await BetterPlayerDashUtils.parse(
+      mainfest,
+      'https://myurl.com/videos/53e4ce8377664d859becd1db87e5b97e/manifest.mpd',
+    );
+  });
+  testWidgets('get all parameters', (tester) async {
+    expect(betterPlayerAsmsDataHolder.audios?.length, equals(2));
+    expect(betterPlayerAsmsDataHolder.subtitles?.length, equals(2));
+    expect(betterPlayerAsmsDataHolder.tracks?.length, equals(5));
+  });
+
+  testWidgets('better player dash utils ...', (tester) async {
+    expect(
+      betterPlayerAsmsDataHolder.subtitles?.first,
+      isA<BetterPlayerAsmsSubtitle>()
+          .having((sub) => sub.name, 'name', equals('en'))
+          .having(
+            (sub) => sub.url,
+            'url',
+            'https://myurl.com/videos/53e4ce8377664d859becd1db87e5b97e/text/text-eng-2.mp4',
+          ),
+    );
   });
 }
 

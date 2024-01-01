@@ -96,18 +96,24 @@ class BetterPlayerDashUtils {
     String? name = node.getAttribute('label');
     final String? language = node.getAttribute('lang');
     final String? mimeType = node.getAttribute('mimeType');
-    String? url =
-        node.getElement('Representation')?.getElement('BaseURL')?.value;
+
+    final representationElement = node.getElement('Representation');
+    final baseUrlElement = representationElement?.getElement('BaseURL');
+    String? url = baseUrlElement?.innerText;
+
     if (url?.contains("http") == false) {
       final Uri masterPlaylistUri = Uri.parse(masterPlaylistUrl);
       final pathSegments = <String>[...masterPlaylistUri.pathSegments];
+      print('pathSegments: ${pathSegments}');
       pathSegments[pathSegments.length - 1] = url!;
-      url = Uri(
+      final urlUri = Uri(
               scheme: masterPlaylistUri.scheme,
               host: masterPlaylistUri.host,
               port: masterPlaylistUri.port,
               pathSegments: pathSegments)
           .toString();
+
+      url = Uri.decodeFull(urlUri);
     }
 
     if (url != null && url.startsWith('//')) {
